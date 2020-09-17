@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -99,6 +100,35 @@ public class BookController {
             LOGGER.severe("New Book is not valid");
             return null;
         }
+    }
+
+    @PutMapping("/updateBook")
+    @ResponseStatus(HttpStatus.OK)
+    Book updateUser(@RequestBody Book updatedBook) {
+        LOGGER.info("API /updateBook");
+        Book resultBook;
+        if (validator.isValid(updatedBook)) {
+            try {
+                Optional<Book> result = bookOps.findById(updatedBook.getId());
+                if (result.isPresent() && validator.isValid(result.get())) {
+                    resultBook = result.get();
+                } else {
+                    LOGGER.severe("No Book with id " + updatedBook.getId() + " Found");
+                    throw new BookNotFoundException(updatedBook.getId());
+                }
+                resultBook.setName(updatedBook.getName());
+                if (!updatedBook.getAuthor().equals("") || updatedBook.getAuthor() != null) {
+                    resultBook.setAuthor(updatedBook.getAuthor());
+                }
+                resultBook.setDate(new Date());
+                return bookOps.save(resultBook);
+            } catch (BookNotFoundException ex) {
+                LOGGER.severe((ex.toString()));
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Book Found", ex);
+            }
+        }
+        LOGGER.severe("New Book is not valid");
+        return null;
     }
 
 }
