@@ -15,4 +15,9 @@ public class UserValidator {
         return true;
     }
 
+    public static enum USER_STATUS {
+        ACTIVE, INACTIVE, DELETED;
+    }
+
+    public static final float DEFAULT_BALANCE = 10;
 }

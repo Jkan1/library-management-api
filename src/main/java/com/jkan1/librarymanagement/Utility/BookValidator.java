@@ -15,4 +15,8 @@ public class BookValidator {
         return true;
     }
 
+    public static enum BOOK_STATUS {
+        AVAILABLE, UNAVAILABLE, INACTIVE, DELETED;
+    }
+
 }
