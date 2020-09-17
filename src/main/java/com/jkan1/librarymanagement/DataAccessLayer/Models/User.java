@@ -27,6 +27,7 @@ public class User {
     @Column(name = "status")
     private String status;
 
+    // Balance Feature to be implemented later
     @Column(name = "balance")
     private float balance;
 

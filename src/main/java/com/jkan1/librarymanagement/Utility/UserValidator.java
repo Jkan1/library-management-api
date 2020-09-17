@@ -19,5 +19,6 @@ public class UserValidator {
         ACTIVE, INACTIVE, DELETED;
     }
 
+    // Balance Feature to be implemented later
     public static final float DEFAULT_BALANCE = 10;
 }
