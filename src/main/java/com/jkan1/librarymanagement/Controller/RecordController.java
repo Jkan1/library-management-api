@@ -24,8 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+@RestController
 public class RecordController {
 
     private final static Logger LOGGER = Logger.getLogger("Book");
@@ -71,15 +73,21 @@ public class RecordController {
             LOGGER.severe("No Book with id " + issueData.getBookId() + " Found");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Book Found");
         }
-        issueData.setAllotmentDate(new Date());
-        issueData.setReturnDate(new Date(System.currentTimeMillis() + 864000000));
-        issueData.setActualReturnDate(null);
-        issueData.setUpdatedAt(new Date());
-        issueData.setStatus(RecordValidator.RECORD_STATUS.ALLOTTED.toString());
         Book bookData = bookResult.get();
-        bookData.setStatus(BookValidator.BOOK_STATUS.UNAVAILABLE.toString());
-        bookOps.save(bookData);
-        return recordOps.save(issueData);
+        if (bookData.getStatus().equals(BookValidator.BOOK_STATUS.AVAILABLE.toString())) {
+            bookData.setStatus(BookValidator.BOOK_STATUS.UNAVAILABLE.toString());
+            bookOps.save(bookData);
+            issueData.setAllotmentDate(new Date());
+            issueData.setReturnDate(new Date(System.currentTimeMillis() + 864000000));
+            issueData.setActualReturnDate(null);
+            issueData.setUpdatedAt(new Date());
+            issueData.setStatus(RecordValidator.RECORD_STATUS.ALLOTTED.toString());
+            bookOps.save(bookData);
+            return recordOps.save(issueData);
+        } else {
+            LOGGER.severe("Book with id " + issueData.getBookId() + " Unavailable");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Book Found");
+        }
     }
 
     @PostMapping("/returnBook")
@@ -115,12 +123,11 @@ public class RecordController {
     }
 
     @GetMapping("/getUserRecords")
-    public List<Record> getUser(@RequestParam long id, @RequestParam(value = "status") String status) {
+    public List<Record> getUserRecords(@RequestParam long id, @RequestParam(value = "status") String status) {
         LOGGER.info("API /getUserRecords");
         List<Record> resultList = new ArrayList<>();
         try {
-            if (!status.equals("")
-                    || status.toUpperCase().equals(RecordValidator.RECORD_STATUS.ALL.toString())) {
+            if (status.toUpperCase().equals(RecordValidator.RECORD_STATUS.ALL.toString())) {
                 resultList = recordOps.findAllByUserId(id);
                 if (resultList.isEmpty()) {
                     LOGGER.severe("No Record with user id " + id + " Found");

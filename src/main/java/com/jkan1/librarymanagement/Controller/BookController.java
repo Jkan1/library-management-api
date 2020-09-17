@@ -90,7 +90,7 @@ public class BookController {
 
     @PostMapping("/addBook")
     @ResponseStatus(HttpStatus.CREATED)
-    Book newBook(@RequestBody Book newBook) {
+    Book addBook(@RequestBody Book newBook) {
         LOGGER.info("API /addBook");
         if (validator.isValid(newBook)) {
             newBook.setDate(new Date());
@@ -104,7 +104,7 @@ public class BookController {
 
     @PutMapping("/updateBook")
     @ResponseStatus(HttpStatus.OK)
-    Book updateUser(@RequestBody Book updatedBook) {
+    Book updateBook(@RequestBody Book updatedBook) {
         LOGGER.info("API /updateBook");
         Book resultBook;
         if (validator.isValid(updatedBook)) {
@@ -117,7 +117,7 @@ public class BookController {
                     throw new BookNotFoundException(updatedBook.getId());
                 }
                 resultBook.setName(updatedBook.getName());
-                if (!updatedBook.getAuthor().equals("") || updatedBook.getAuthor() != null) {
+                if (updatedBook.getAuthor() != null) {
                     resultBook.setAuthor(updatedBook.getAuthor());
                 }
                 resultBook.setDate(new Date());
@@ -128,7 +128,7 @@ public class BookController {
             }
         }
         LOGGER.severe("New Book is not valid");
-        return null;
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New Book is not valid");
     }
 
 }

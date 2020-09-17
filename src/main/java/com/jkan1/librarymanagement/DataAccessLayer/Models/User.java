@@ -21,9 +21,6 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "books_allotted")
-    private Book[] booksAllotted;
-
     @Column(name = "created_at")
     private Date date;
 
@@ -47,14 +44,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Book[] getBooksAllotted() {
-        return booksAllotted;
-    }
-
-    public void setBooksAllotted(Book[] booksAllotted) {
-        this.booksAllotted = booksAllotted;
     }
 
     public Date getDate() {

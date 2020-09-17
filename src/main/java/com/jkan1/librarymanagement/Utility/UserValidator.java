@@ -9,7 +9,7 @@ import com.jkan1.librarymanagement.DataAccessLayer.Models.User;
 public class UserValidator {
 
     public boolean isValid(User user) {
-        if (user == null || user.getName().equals("") || user.getName() == null) {
+        if (user == null || user.getName() == null || user.getName().equals("")) {
             return false;
         }
         return true;

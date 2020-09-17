@@ -53,7 +53,7 @@ public class UserController {
 
     @PostMapping("/addUser")
     @ResponseStatus(HttpStatus.CREATED)
-    User newUser(@RequestBody User newUser) {
+    User addUser(@RequestBody User newUser) {
         LOGGER.info("API /addUser");
         if (validator.isValid(newUser)) {
             newUser.setDate(new Date());
@@ -89,7 +89,7 @@ public class UserController {
             }
         }
         LOGGER.severe("New User is not valid");
-        return null;
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New User is not valid");
     }
 
 }
