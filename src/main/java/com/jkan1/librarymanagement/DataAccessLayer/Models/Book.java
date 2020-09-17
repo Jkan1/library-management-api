@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Version;
 
 @Entity
 public class Book {
@@ -17,18 +18,21 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
     @Column(name = "title")
     private String name;
-    
+
     @Column(name = "author")
     private String author;
-    
-    @Column(name = "created_at")
+
+    @Column(name = "updated_at")
     private Date date;
-    
+
     @Column(name = "status")
     private String status;
+
+    @Version
+    private short version;
 
     public long getId() {
         return id;
@@ -68,5 +72,13 @@ public class Book {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public short getVersion() {
+        return version;
+    }
+
+    public void setVersion(short version) {
+        this.version = version;
     }
 }

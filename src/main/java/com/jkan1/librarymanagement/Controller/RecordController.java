@@ -76,13 +76,13 @@ public class RecordController {
         Book bookData = bookResult.get();
         if (bookData.getStatus().equals(BookValidator.BOOK_STATUS.AVAILABLE.toString())) {
             bookData.setStatus(BookValidator.BOOK_STATUS.UNAVAILABLE.toString());
+            bookData.setDate(new Date());
             bookOps.save(bookData);
             issueData.setAllotmentDate(new Date());
             issueData.setReturnDate(new Date(System.currentTimeMillis() + 864000000));
             issueData.setActualReturnDate(null);
             issueData.setUpdatedAt(new Date());
             issueData.setStatus(RecordValidator.RECORD_STATUS.ALLOTTED.toString());
-            bookOps.save(bookData);
             return recordOps.save(issueData);
         } else {
             LOGGER.severe("Book with id " + issueData.getBookId() + " Unavailable");
@@ -117,6 +117,7 @@ public class RecordController {
             activeRecord.setStatus(RecordValidator.RECORD_STATUS.RETURNED.toString());
         }
         Book bookData = bookResult.get();
+        bookData.setDate(new Date());
         bookData.setStatus(BookValidator.BOOK_STATUS.AVAILABLE.toString());
         bookOps.save(bookData);
         return recordOps.save(activeRecord);
