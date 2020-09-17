@@ -25,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class UserController {
 
-    private final static Logger LOGGER = Logger.getLogger("Book");
+    private final static Logger LOGGER = Logger.getLogger("User");
 
     @Autowired
     UserRepository userOps;

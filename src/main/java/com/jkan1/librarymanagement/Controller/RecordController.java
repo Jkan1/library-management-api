@@ -30,7 +30,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class RecordController {
 
-    private final static Logger LOGGER = Logger.getLogger("Book");
+    private final static Logger LOGGER = Logger.getLogger("Record");
 
     @Autowired
     RecordRepository recordOps;
